@@ -1,0 +1,16 @@
+@if (svc.config(); as cfg) {
+  <div class="dialog-backdrop" role="dialog" aria-modal="true" [attr.aria-label]="cfg.title">
+    <div class="dialog-panel">
+      <h2 class="dialog-title">{{ cfg.title }}</h2>
+      <p class="dialog-message">{{ cfg.message }}</p>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn--secondary" (click)="svc.cancel()">
+          {{ cfg.cancelLabel ?? 'Cancel' }}
+        </button>
+        <button type="button" class="btn btn--danger" (click)="svc.accept()">
+          {{ cfg.confirmLabel ?? 'Confirm' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,38 @@
+<section class="task-filter" aria-label="Filter tasks">
+  <div class="task-filter__controls">
+    <input
+      type="search"
+      class="form-control"
+      placeholder="Search by title or description…"
+      [value]="filter().search"
+      (input)="onSearchInput($any($event.target).value)"
+      aria-label="Search tasks"
+    />
+
+    <select
+      class="form-control"
+      [value]="filter().status"
+      (change)="onStatusChange($any($event.target).value)"
+      aria-label="Filter by status"
+    >
+      @for (s of statuses; track s.value) {
+        <option [value]="s.value">{{ s.label }}</option>
+      }
+    </select>
+
+    <select
+      class="form-control"
+      [value]="filter().priority"
+      (change)="onPriorityChange($any($event.target).value)"
+      aria-label="Filter by priority"
+    >
+      @for (p of priorities; track p.value) {
+        <option [value]="p.value">{{ p.label }}</option>
+      }
+    </select>
+
+    @if (hasActiveFilters) {
+      <button type="button" class="btn btn--ghost" (click)="reset()">Clear filters</button>
+    }
+  </div>
+</section>

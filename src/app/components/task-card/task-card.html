@@ -1,0 +1,30 @@
+<article class="task-card" [class]="'priority-' + task().priority" [class.overdue]="isOverdue">
+  <header class="task-card__header">
+    <span class="badge badge--status" [class]="'badge--' + task().status">
+      {{ task().status === 'in-progress' ? 'In Progress' : task().status === 'completed' ? 'Completed' : 'To Do' }}
+    </span>
+    <span class="badge badge--priority" [class]="'badge--priority-' + task().priority">
+      {{ task().priority | titlecase }}
+    </span>
+    @if (isOverdue) {
+      <span class="badge badge--overdue">Overdue</span>
+    }
+  </header>
+
+  <h3 class="task-card__title">{{ task().title }}</h3>
+
+  @if (task().description) {
+    <p class="task-card__description">{{ task().description }}</p>
+  }
+
+  <p class="task-card__due" [class.task-card__due--overdue]="isOverdue">
+    Due: {{ task().dueDate }}
+  </p>
+
+  <footer class="task-card__actions">
+    <a [routerLink]="['/tasks', task().id, 'edit']" class="btn btn--secondary btn--sm">Edit</a>
+    <button type="button" class="btn btn--danger btn--sm" (click)="onDeleteClick($event)">
+      Delete
+    </button>
+  </footer>
+</article>

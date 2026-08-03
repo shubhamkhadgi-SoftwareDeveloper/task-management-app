@@ -1,0 +1,57 @@
+<div class="task-list-page">
+  <div class="page-header">
+    <h1 class="page-title">Tasks</h1>
+    <a routerLink="/tasks/new" class="btn btn--primary">+ New Task</a>
+  </div>
+
+  <!-- Dashboard Summary -->
+  <div class="dashboard" role="region" aria-label="Task summary">
+    <div class="stat-card">
+      <span class="stat-card__value">{{ stats().total }}</span>
+      <span class="stat-card__label">Total</span>
+    </div>
+    <div class="stat-card stat-card--completed">
+      <span class="stat-card__value">{{ stats().completed }}</span>
+      <span class="stat-card__label">Completed</span>
+    </div>
+    <div class="stat-card stat-card--in-progress">
+      <span class="stat-card__value">{{ stats().inProgress }}</span>
+      <span class="stat-card__label">In Progress</span>
+    </div>
+    <div class="stat-card stat-card--overdue">
+      <span class="stat-card__value">{{ stats().overdue }}</span>
+      <span class="stat-card__label">Overdue</span>
+    </div>
+  </div>
+
+  <app-task-filter />
+
+  @if (error()) {
+    <div class="alert alert--error" role="alert">
+      <span>{{ error() }}</span>
+      <button type="button" class="alert__dismiss" aria-label="Dismiss error" (click)="dismissError()">✕</button>
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-grid" aria-busy="true" aria-label="Loading tasks">
+      @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+        <div class="skeleton-card"></div>
+      }
+    </div>
+  } @else if (tasks().length === 0) {
+    <div class="empty-state" role="status">
+      <p class="empty-state__icon" aria-hidden="true">📋</p>
+      <p class="empty-state__message">No tasks match your filters.</p>
+      <a routerLink="/tasks/new" class="btn btn--primary">Create a new task</a>
+    </div>
+  } @else {
+    <ul class="task-grid" role="list">
+      @for (task of tasks(); track task.id) {
+        <li>
+          <app-task-card [task]="task" (deleteConfirmed)="deleteTask($event)" />
+        </li>
+      }
+    </ul>
+  }
+</div>

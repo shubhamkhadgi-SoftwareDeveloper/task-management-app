@@ -1,0 +1,16 @@
+.task-filter__controls {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.task-filter__controls .form-control {
+  flex: 1;
+  min-width: 140px;
+}
+
+.task-filter__controls input[type='search'] {
+  flex: 2;
+  min-width: 200px;
+}

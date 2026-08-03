@@ -1,0 +1,110 @@
+<div class="task-form-page">
+  <div class="page-header">
+    <h1 class="page-title">{{ isEditMode() ? 'Edit Task' : 'New Task' }}</h1>
+    <a routerLink="/tasks" class="btn btn--ghost">← Back</a>
+  </div>
+
+  @if (loadingTask()) {
+    <div class="loading-placeholder" aria-busy="true" aria-label="Loading task">
+      <div class="skeleton-line skeleton-line--title"></div>
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line"></div>
+    </div>
+  } @else if (loadError()) {
+    <div class="alert alert--error" role="alert">{{ loadError() }}</div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-card" novalidate>
+
+      <div class="form-field">
+        <label for="title" class="form-label">
+          Title <span class="required-mark" aria-hidden="true">*</span>
+        </label>
+        <input
+          id="title"
+          type="text"
+          class="form-control"
+          [class.form-control--error]="hasError('title', 'required') || hasError('title', 'minlength') || hasError('title', 'maxlength')"
+          formControlName="title"
+          placeholder="What needs to be done?"
+          autocomplete="off"
+        />
+        @if (hasError('title', 'required')) {
+          <p class="form-error" role="alert">Title is required.</p>
+        } @else if (hasError('title', 'minlength')) {
+          <p class="form-error" role="alert">Title must be at least 3 characters.</p>
+        } @else if (hasError('title', 'maxlength')) {
+          <p class="form-error" role="alert">Title cannot exceed 100 characters.</p>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          id="description"
+          class="form-control form-control--textarea"
+          [class.form-control--error]="hasError('description', 'maxlength')"
+          formControlName="description"
+          rows="3"
+          placeholder="Add more detail…"
+        ></textarea>
+        @if (hasError('description', 'maxlength')) {
+          <p class="form-error" role="alert">Description cannot exceed 500 characters.</p>
+        }
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="status" class="form-label">
+            Status <span class="required-mark" aria-hidden="true">*</span>
+          </label>
+          <select id="status" class="form-control" formControlName="status">
+            @for (s of statuses; track s.value) {
+              <option [value]="s.value">{{ s.label }}</option>
+            }
+          </select>
+          @if (hasError('status', 'required')) {
+            <p class="form-error" role="alert">Status is required.</p>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="priority" class="form-label">
+            Priority <span class="required-mark" aria-hidden="true">*</span>
+          </label>
+          <select id="priority" class="form-control" formControlName="priority">
+            @for (p of priorities; track p.value) {
+              <option [value]="p.value">{{ p.label }}</option>
+            }
+          </select>
+          @if (hasError('priority', 'required')) {
+            <p class="form-error" role="alert">Priority is required.</p>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="dueDate" class="form-label">
+            Due Date <span class="required-mark" aria-hidden="true">*</span>
+          </label>
+          <input
+            id="dueDate"
+            type="date"
+            class="form-control"
+            [class.form-control--error]="hasError('dueDate', 'required')"
+            formControlName="dueDate"
+          />
+          @if (hasError('dueDate', 'required')) {
+            <p class="form-error" role="alert">Due date is required.</p>
+          }
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/tasks" class="btn btn--secondary">Cancel</a>
+        <button type="submit" class="btn btn--primary" [disabled]="submitting()">
+          @if (submitting()) { Saving… } @else { {{ isEditMode() ? 'Save Changes' : 'Create Task' }} }
+        </button>
+      </div>
+
+    </form>
+  }
+</div>
